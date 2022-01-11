@@ -62,7 +62,7 @@ export default function tableCellColumnWidthResize() {
 		return null;
 	}
 
-	const MIN_WIDTH = 28; // 单元格 最小宽度 - 默认应该是 2em，字体大小是 14px
+	let minWidth = 0; // 单元格 最小宽度 - 默认 2em，需要根据字体大小设置
 	const { editor } = this;
 	const viewDocument = editor.editing.view.document;
 
@@ -102,11 +102,14 @@ export default function tableCellColumnWidthResize() {
 		cell = getParentElement( domTarget, 'TD' );
 		cellRect = cell.getBoundingClientRect();
 
+		// eslint-disable-next-line no-undef
+		minWidth = parseInt( window.getComputedStyle( cell ).fontSize ) * 2; // 2em
+
 		const table = getParentElement( cell, 'TABLE' );
 		tableX = table.getBoundingClientRect().x;
 
 		resizeBar = getResizeBarElement( table );
-		resizeBarMinX = cellRect.x - tableX + MIN_WIDTH;
+		resizeBarMinX = cellRect.x - tableX + minWidth;
 
 		updateResizeBarStyle( {
 			display: 'block',
@@ -141,7 +144,7 @@ export default function tableCellColumnWidthResize() {
 
 		if ( distance !== 0 ) {
 			let newWidth = cellRect.width + distance;
-			newWidth = newWidth < MIN_WIDTH ? MIN_WIDTH : newWidth;
+			newWidth = newWidth < minWidth ? minWidth : newWidth;
 
 			setCellWidth( editor, newWidth );
 		}

@@ -26,6 +26,7 @@
 
 		& td,
 		& th {
+			position: relative;
 			min-width: 2em;
 			padding: .4em;
 
@@ -39,6 +40,27 @@
 			font-weight: bold;
 			background: hsla(0, 0%, 0%, 5%);
 		}
+
+		& .ck-table-resizer {
+			position: absolute;
+			top: 0;
+			right: -8px;
+			height: 100%;
+			width: 16px;
+			cursor: ew-resize;
+			z-index: 1;
+		}
+	}
+
+	& .ck-table-resize-bar {
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 2px;
+		height: 100%;
+		background: var(--ck-color-focus-border);
+		cursor: ew-resize;
 	}
 }
 

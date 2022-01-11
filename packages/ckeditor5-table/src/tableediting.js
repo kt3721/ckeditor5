@@ -19,6 +19,8 @@ import {
 	downcastTableHeadingColumnsChange
 } from './converters/downcast';
 
+import tableCellColumnWidthResize from './utils/table-column-resize';
+
 import InsertTableCommand from './commands/inserttablecommand';
 import InsertRowCommand from './commands/insertrowcommand';
 import InsertColumnCommand from './commands/insertcolumncommand';
@@ -168,6 +170,8 @@ export default class TableEditing extends Plugin {
 		injectTableLayoutPostFixer( model );
 		injectTableCellRefreshPostFixer( model, editor.editing.mapper );
 		injectTableCellParagraphPostFixer( model );
+
+		tableCellColumnWidthResize.call( this );
 	}
 
 	/**

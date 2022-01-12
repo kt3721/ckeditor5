@@ -113,7 +113,7 @@ export default function tableCellColumnWidthResize() {
 
 		updateResizeBarStyle( {
 			display: 'block',
-			left: cellRect.x - tableX + cellRect.width - 1
+			left: cellRect.x - tableX + cellRect.width
 		} );
 	} );
 

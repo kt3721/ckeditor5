@@ -37,14 +37,18 @@ export function downcastInsertTable( options = {} ) {
 		const tableElement = conversionApi.writer.createContainerElement( 'table' );
 		conversionApi.writer.insert( conversionApi.writer.createPositionAt( figureElement, 0 ), tableElement );
 
-		// 插入 resizeBar（用于 resize 时 标志 单元格调整后宽度） - 插入到 figure 元素内最后面
-		const resizeBarElement = conversionApi.writer.createContainerElement( 'div', { class: 'ck-table-resize-bar' } );
-		const resizeBarInsertPosition = conversionApi.writer.createPositionAt( figureElement, 'end' );
-		conversionApi.writer.insert( resizeBarInsertPosition, resizeBarElement );
-
 		let tableWidget;
 
 		if ( asWidget ) {
+			/*
+			* asWidget 为 true 时才需要添加辅助元素，
+			* 否则会导致 辅助元素输出到 editor data 中
+			* */
+			// 插入 resizeBar（用于 resize 时 标志 单元格调整后宽度） - 插入到 figure 元素内最后面
+			const resizeBarElement = conversionApi.writer.createUIElement( 'div', { class: 'ck-table-resize-bar' } );
+			const resizeBarInsertPosition = conversionApi.writer.createPositionAt( figureElement, 'end' );
+			conversionApi.writer.insert( resizeBarInsertPosition, resizeBarElement );
+
 			tableWidget = toTableWidget( figureElement, conversionApi.writer );
 		}
 
@@ -363,10 +367,16 @@ function createViewTableCellElement( tableSlot, tableAttributes, insertPosition,
 
 	conversionApi.writer.insert( insertPosition, cellElement );
 
-	// 插入 单元格宽度 调整按钮（鼠标点击后可拖动） - 插入在 单元格内最后面
-	const resizerElement = conversionApi.writer.createContainerElement( 'div', { class: 'ck-table-resizer' } );
-	const resizerInsertPosition = conversionApi.writer.createPositionAt( cellElement, 'end' );
-	conversionApi.writer.insert( resizerInsertPosition, resizerElement );
+	/*
+	* asWidget 为 true 时才需要添加辅助元素，
+	* 否则会导致 辅助元素输出到 editor data 中
+	* */
+	if ( asWidget ) {
+		// 插入 单元格宽度 调整按钮（鼠标点击后可拖动） - 插入在 单元格内最后面
+		const resizerElement = conversionApi.writer.createUIElement( 'div', { class: 'ck-table-resizer' } );
+		const resizerInsertPosition = conversionApi.writer.createPositionAt( cellElement, 'end' );
+		conversionApi.writer.insert( resizerInsertPosition, resizerElement );
+	}
 
 	conversionApi.mapper.bindElements( tableCell, cellElement );
 
